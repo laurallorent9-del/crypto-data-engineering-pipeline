@@ -1,24 +1,42 @@
-# Spotify Data Engineering Project
+# Crypto Data Engineering Pipeline
 
-Proyecto de aprendizaje de Ingeniería de Datos.
+Proyecto de ingeniería de datos que extrae información de criptomonedas desde la API de CoinGecko y la carga en PostgreSQL para su análisis mediante SQL.
+
+## Arquitectura
+
+CoinGecko API
+    ↓
+Extract
+    ↓
+Transform
+    ↓
+PostgreSQL
+    ↓
+SQL Analytics
 
 ## Tecnologías
 
 - Python
 - Pandas
-- Requests
+- PostgreSQL
+- SQLAlchemy
 - Git
 - GitHub
 
-## Arquitectura actual
+## Estructura del proyecto
 
-API CoinGecko
-    ↓
-Python
-    ↓
-CSV
+├── docs
+├── scripts
+│   └── etl_pipeline.py
+├── sql
+│   ├── market_summary.sql
+│   └── top_10_cryptos.sql
+├── README.md
+└── requirements.txt
 
-## Ejecución
+## Cómo ejecutar
+
+Ejecutar el pipeline:
 
 ```bash
-py scripts/extract.py
+py scripts/etl_pipeline.py
