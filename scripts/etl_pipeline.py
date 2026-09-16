@@ -4,13 +4,13 @@ from sqlalchemy import create_engine
 
 
 def extract():
-    url = "https://api.coingecko.com/api/v3/coins/markets"
+    url="https://api.coingecko.com/api/v3/coins/markets"
 
-    params = {
+    params={
         "vs_currency": "usd"
     }
 
-    response = requests.get(url, params=params)
+    response=requests.get(url, params=params)
 
     return pd.DataFrame(response.json())
 
@@ -25,7 +25,7 @@ def transform(df):
 
 def load(df):
 
-    engine = create_engine(
+    engine=create_engine(
         "postgresql://postgres:admin@localhost:5432/spotify_data"
     )
 
@@ -39,9 +39,9 @@ def load(df):
 
 def main():
 
-    df = extract()
+    df=extract()
 
-    df = transform(df)
+    df=transform(df)
 
     load(df)
 
