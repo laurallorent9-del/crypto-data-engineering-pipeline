@@ -1,34 +1,75 @@
 # Crypto Data Engineering Pipeline
 
-Proyecto personal de ingeniería de datos que extrae información de criptomonedas desde la API pública de CoinGecko, transforma los datos y los carga en PostgreSQL para su análisis mediante SQL.
+Personal Data Engineering project that extracts cryptocurrency data from the CoinGecko API, transforms it using Python and loads it into PostgreSQL for analytical SQL queries.
 
-## Objetivo
+---
 
-Construir un pipeline ETL completo utilizando herramientas habituales en ingeniería de datos.
+## Project Goal
 
-## Arquitectura
+The objective of this project is to build an end-to-end ETL pipeline following common Data Engineering practices:
 
-CoinGecko API
-    ↓
-Extract
-    ↓
-Transform
-    ↓
-PostgreSQL
-    ↓
-SQL Analytics
+- Extract data from a REST API
+- Transform and clean the data
+- Load the processed dataset into PostgreSQL
+- Perform analytical queries using SQL
+- Manage the project with Git and GitHub
 
-## Tecnologías
+---
+
+## Architecture
+
+```text
+┌─────────────────┐
+│ CoinGecko API   │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Extract         │
+│ Python Requests │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Transform       │
+│ Pandas          │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Load            │
+│ PostgreSQL      │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ SQL Analytics   │
+│ • Top 10        │
+│ • Top Movers    │
+│ • Top Volume    │
+│ • Summary       │
+└─────────────────┘
+```
+
+---
+
+## Technologies
 
 - Python
 - Pandas
+- Requests
 - PostgreSQL
 - SQLAlchemy
 - SQL
 - Git
 - GitHub
 
-## Estructura del proyecto
+---
+
+## Project Structure
+
+```text
+crypto-data-engineering-pipeline
 
 ├── docs
 │   └── architecture.md
@@ -37,23 +78,41 @@ SQL Analytics
 │   └── etl_pipeline.py
 
 ├── sql
+│   ├── market_summary.sql
 │   ├── top_10_cryptos.sql
-│   └── market_summary.sql
+│   ├── top_movers.sql
+│   └── top_volume_cryptos.sql
 
 ├── README.md
 
 └── requirements.txt
+```
 
-## Funcionalidades
+---
 
-- Extracción de datos desde una API REST.
-- Limpieza y transformación de datos.
-- Carga automática en PostgreSQL.
-- Consultas analíticas mediante SQL.
+## ETL Process
 
-## Consultas incluidas
+### Extract
 
-### Top 10 criptomonedas por market cap
+Data is collected from the CoinGecko public API using Python and Requests.
+
+### Transform
+
+The dataset is cleaned and transformed using Pandas.
+
+During development, a nested JSON field (`roi`) generated compatibility issues with PostgreSQL. This field was removed during the transformation stage before loading the data into the database.
+
+### Load
+
+The transformed dataset is loaded into PostgreSQL using SQLAlchemy.
+
+---
+
+## SQL Analytics
+
+The project includes several analytical SQL queries:
+
+### Top 10 cryptocurrencies by market capitalization
 
 ```sql
 SELECT
@@ -64,3 +123,76 @@ SELECT
 FROM crypto_prices
 ORDER BY market_cap DESC
 LIMIT 10;
+```
+
+### Market summary
+
+```sql
+SELECT
+    COUNT(*) AS total_cryptocurrencies,
+    ROUND(AVG(current_price)::numeric, 2) AS average_price,
+    SUM(market_cap) AS total_market_cap
+FROM crypto_prices;
+```
+
+### Top cryptocurrencies by volume
+
+```sql
+SELECT
+    name,
+    symbol,
+    total_volume
+FROM crypto_prices
+ORDER BY total_volume DESC
+LIMIT 10;
+```
+
+### Top movers
+
+```sql
+SELECT
+    name,
+    symbol,
+    price_change_percentage_24h
+FROM crypto_prices
+ORDER BY price_change_percentage_24h DESC
+LIMIT 10;
+```
+
+---
+
+## Installation
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Run Pipeline
+
+```bash
+py scripts/etl_pipeline.py
+```
+
+---
+
+## Key Learnings
+
+Through this project I gained hands-on experience with:
+
+- REST API consumption
+- Data transformation with*Pandas
+- ETL pipeline design
+- PostgreSQL integration
+- SQL analytics
+- Git version control
+- GitHub project management
+
+---
+
+## Author
+
+Laura Llorent
